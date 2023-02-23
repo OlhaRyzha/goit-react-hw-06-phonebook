@@ -9,21 +9,20 @@ export const CONTACTS = [
 
 const initialState = {
   contacts: CONTACTS,
-  filter: '',
 };
 
 const contactsSlice = createSlice({
   name: 'contacts',
   initialState,
   reducers: {
-    setContacts(state, action) {
-      state.contacts = action.payload;
+    addContact(state, { payload }) {
+      state.contacts = [...state.contacts, payload];
     },
-    setFilter(state, action) {
-      state.filter = action.payload;
+    deleteContact(state, { payload }) {
+      state.contacts = state.contacts.filter(contact => contact.id !== payload);
     },
   },
 });
 
-export const { setContacts, setFilter } = contactsSlice.actions;
+export const { addContact, deleteContact } = contactsSlice.actions;
 export const contactsReducer = contactsSlice.reducer;

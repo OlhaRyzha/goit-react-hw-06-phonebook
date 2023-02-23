@@ -1,34 +1,23 @@
-import { Component } from 'react';
 import { Card, Button } from './ContactList.styled';
-import PropTypes from 'prop-types';
+import { getFilteredContacts } from 'redux/selectors';
+import { deleteContact } from 'redux/contactsSlice';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-export class ContactList extends Component {
-  static propTypes = {
-    contacts: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
-          .isRequired,
-        name: PropTypes.string.isRequired,
-        number: PropTypes.string.isRequired,
-      })
-    ),
-    onDeleteProduct: PropTypes.func,
-  };
+export function ContactList() {
+  const contacts = useSelector(getFilteredContacts);
+  const dispatch = useDispatch();
 
-  render() {
-    return (
-      <>
-        <Card>
-          {this.props.contacts.map(contact => (
-            <li key={contact.id}>
-              {contact.name}: {contact.number}
-              <Button onClick={() => this.props.onDeleteProduct(contact.id)}>
-                Delete
-              </Button>
-            </li>
-          ))}
-        </Card>
-      </>
-    );
-  }
+  return (
+    <>
+      <Card>
+        {contacts.map(({ name, number, id }) => (
+          <li key={id}>
+            {name}: {number}
+            <Button onClick={() => dispatch(deleteContact(id))}>Delete</Button>
+          </li>
+        ))}
+      </Card>
+    </>
+  );
 }
